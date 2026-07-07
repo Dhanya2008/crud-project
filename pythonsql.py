@@ -26,7 +26,7 @@ def add_hotel():
 def display_hotel():
     cursor.execute("select * from hotel")
     rows=cursor.fetchall()
-    print("\nRoom_no  G_name  H_name  No_days VIP")
+    print("\nRoom_no  Guest  Helper  No_days VIP")
     print("-" * 50)
     for r in rows:
         print(f"{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\t{r[4]}")
@@ -57,7 +57,35 @@ def delete_hotel():
     conn.commit()
     print("The data of the guest is deleted successfully..")
     
+#selecting only the vip guests
+def vip_guest():
+    cursor.execute("select * from hotel where vip='yes'")
+    rows = cursor.fetchall()
+    print("\nRoom_no  Guest  Helper  No_days VIP")
+    print("-" * 50)
+    for r in rows:
+        print(f"{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\t{r[4]}")
+        
+#searching for a particular guest
+def search_guest():
+    room_no=int(input("Enter the room no: "))
+    sql="select * from hotel where room_no=%s"
+    cursor.execute(sql,(room_no))
+    row=cursor.fetchone()
+    print("\nRoom_no  Guest  Helper  No_days VIP")
+    print("-" * 50)
+    if row:
+        print(f"{row[0]}\t{row[1]}\t{row[2]}\t{row[3]}\t{row[4]}")
+    else:
+        print("Guest not found")
+        
 
+#counting the total number of guests
+def total_guests():
+    cursor.execute("select count(*) from hotel")
+    count = cursor.fetchone()
+    print("Total Guests:", count[0])
+        
 #condition for each function
 while True:
     print("\n:::::::::::TRINAY HOTELS::::::::::::")
@@ -65,7 +93,10 @@ while True:
     print("ii) Display the data of the Guest")
     print("iii) Update the data of the Guest")
     print("iv) Remove the data of the Guest")  
-    print("v) End")
+    print("v) Display only the VIP Guests")
+    print("vi) Search for a particular Guest ")
+    print("vii) Count the number of Guests")
+    print("viii) End") 
     
     
     choice=input("Choose an option from the data given below: ")
@@ -78,6 +109,12 @@ while True:
     elif choice == "iv":
         delete_hotel()
     elif choice == "v":
+        vip_guest()
+    elif choice == "vi":
+        search_guest()
+    elif choice == "vii":
+        total_guests()
+    elif choice == "viii":
         print("THE END")
         break;
     else:
