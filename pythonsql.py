@@ -1,0 +1,86 @@
+import pymysql
+
+#connecting to mysql database
+conn=pymysql.connect(
+    host="localhost",
+    user="root",
+    password="1234",
+    database="crud_pro"
+)
+cursor=conn.cursor()
+
+#adding data to the database
+def add_hotel():
+    guest_name=input("Enter the guest name: ")
+    helper_name=input("Enter the helper name: ")
+    no_days=input("Enter the number of days the guest is staying: ")
+    vip=input("Is the guest a VIP? (yes/no): ")
+    
+    sql="insert into hotel(guest_name,helper_name,no_days,vip) values(%s,%s,%s,%s)"
+    cursor.execute(sql,(guest_name,helper_name,no_days,vip))
+    conn.commit()
+    print("The data of the guest has been added successfully.")
+    
+    
+#viewing the data of the guests
+def display_hotel():
+    cursor.execute("select * from hotel")
+    rows=cursor.fetchall()
+    print("\nRoom_no  G_name  H_name  No_days VIP")
+    print("-" * 50)
+    for r in rows:
+        print(f"{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\t{r[4]}")
+        
+        
+#update the data of the guest
+def update_hotel():
+    room_no=int(input("Enter the room number: "))
+    guest_name=input("Enter the guest name: ")
+    helper_name=input("Enter the helper name: ")
+    no_days=input("Enter the number of days the guest is staying: ")
+    vip=input("Is the guest a VIP? (yes/no): ")
+    
+    sql="""
+    update hotel
+    set guest_name=%s,helper_name=%s,no_days=%s,vip=%s
+    where room_no=%s"""
+    cursor.execute(sql,(guest_name,helper_name,no_days,vip,room_no))
+    conn.commit
+    print("The data of the guest is updated successfully..")
+    
+    
+#deleting data of the guest
+def delete_hotel():
+    room_no=int(input("Enter the room number: "))
+    sql="delete from hotel where room_no=%s"
+    cursor.execute(sql,(room_no))
+    conn.commit()
+    print("The data of the guest is deleted successfully..")
+    
+
+#condition for each function
+while True:
+    print("\n:::::::::::TRINAY HOTELS::::::::::::")
+    print("i) Upload the data of the Guest")
+    print("ii) Display the data of the Guest")
+    print("iii) Update the data of the Guest")
+    print("iv) Remove the data of the Guest")  
+    print("v) End")
+    
+    
+    choice=input("Choose an option from the data given below: ")
+    if choice == "i":
+        add_hotel()
+    elif choice == "ii":
+        display_hotel()
+    elif choice =="iii":
+        update_hotel()
+    elif choice == "iv":
+        delete_hotel()
+    elif choice == "v":
+        print("THE END")
+        break;
+    else:
+        print("Invalid Choice")
+cursor.close()
+conn.close()
