@@ -78,8 +78,17 @@ def search_guest():
         print(f"{row[0]}\t{row[1]}\t{row[2]}\t{row[3]}\t{row[4]}")
     else:
         print("Guest not found")
+ 
+ #Checking the availability of the room       
+def room_available():
+    room_no = int(input("Enter Room Number: "))
+    cursor.execute("select * from hotel where room_no=%s", (room_no,))
+    room = cursor.fetchone()
+    if room:
+        print("Room is occupied by another guest.")
+    else:
+        print("Room is available.")
         
-
 #counting the total number of guests
 def total_guests():
     cursor.execute("select count(*) from hotel")
@@ -96,7 +105,8 @@ while True:
     print("v) Display only the VIP Guests")
     print("vi) Search for a particular Guest ")
     print("vii) Count the number of Guests")
-    print("viii) End") 
+    print("viii) Check for availability of room")
+    print("ix) End") 
     
     
     choice=input("Choose an option from the data given below: ")
@@ -115,6 +125,8 @@ while True:
     elif choice == "vii":
         total_guests()
     elif choice == "viii":
+        room_available()
+    elif choice == "ix":
         print("THE END")
         break;
     else:
