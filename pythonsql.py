@@ -11,13 +11,14 @@ cursor=conn.cursor()
 
 #adding data to the database
 def add_hotel():
+    room_no=int(input("Enter the roon no: "))
     guest_name=input("Enter the guest name: ")
     helper_name=input("Enter the helper name: ")
     no_days=input("Enter the number of days the guest is staying: ")
     vip=input("Is the guest a VIP? (yes/no): ")
     
-    sql="insert into hotel(guest_name,helper_name,no_days,vip) values(%s,%s,%s,%s)"
-    cursor.execute(sql,(guest_name,helper_name,no_days,vip))
+    sql="insert into hotel(room_no,guest_name,helper_name,no_days,vip) values(%s,%s,%s,%s,%s)"
+    cursor.execute(sql,(room_no,guest_name,helper_name,no_days,vip))
     conn.commit()
     print("The data of the guest has been added successfully.")
     
@@ -60,6 +61,7 @@ def delete_hotel():
 #selecting only the vip guests
 def vip_guest():
     cursor.execute("select * from hotel where vip='yes'")
+    conn.commit()
     rows = cursor.fetchall()
     print("\nRoom_no  Guest  Helper  No_days VIP")
     print("-" * 50)
@@ -71,6 +73,7 @@ def search_guest():
     room_no=int(input("Enter the room no: "))
     sql="select * from hotel where room_no=%s"
     cursor.execute(sql,(room_no))
+    conn.commit()
     row=cursor.fetchone()
     print("\nRoom_no  Guest  Helper  No_days VIP")
     print("-" * 50)
@@ -79,6 +82,12 @@ def search_guest():
     else:
         print("Guest not found")
  
+ #counting the total number of guests
+def total_guests():
+    cursor.execute("select count(*) from hotel")
+    count = cursor.fetchone()
+    print("Total Guests:", count[0])
+    
  #Checking the availability of the room       
 def room_available():
     room_no = int(input("Enter Room Number: "))
@@ -88,12 +97,6 @@ def room_available():
         print("Room is occupied by another guest.")
     else:
         print("Room is available.")
-        
-#counting the total number of guests
-def total_guests():
-    cursor.execute("select count(*) from hotel")
-    count = cursor.fetchone()
-    print("Total Guests:", count[0])
         
 #condition for each function
 while True:
@@ -107,7 +110,6 @@ while True:
     print("vii) Count the number of Guests")
     print("viii) Check for availability of room")
     print("ix) End") 
-    
     
     choice=input("Choose an option from the data given below: ")
     if choice == "i":
@@ -127,7 +129,7 @@ while True:
     elif choice == "viii":
         room_available()
     elif choice == "ix":
-        print("THE END")
+        print("THANK YOU")
         break;
     else:
         print("Invalid Choice")
