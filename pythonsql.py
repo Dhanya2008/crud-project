@@ -58,6 +58,7 @@ def delete_hotel():
     conn.commit()
     print("The data of the guest is deleted successfully..")
     
+    
 #selecting only the vip guests
 def vip_guest():
     cursor.execute("select * from hotel where vip='yes'")
@@ -67,6 +68,7 @@ def vip_guest():
     print("-" * 50)
     for r in rows:
         print(f"{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\t{r[4]}")
+        
         
 #searching for a particular guest
 def search_guest():
@@ -81,12 +83,24 @@ def search_guest():
         print(f"{row[0]}\t{row[1]}\t{row[2]}\t{row[3]}\t{row[4]}")
     else:
         print("Guest not found")
+        
  
  #counting the total number of guests
 def total_guests():
     cursor.execute("select count(*) from hotel")
-    count = cursor.fetchone()
-    print("Total Guests:", count[0])
+    total = cursor.fetchone()[0]
+
+    cursor.execute("select count(*) from hotel where vip='yes'")
+    vip = cursor.fetchone()[0]
+
+    cursor.execute("select count(*) from hotel where vip='no'")
+    non_vip = cursor.fetchone()[0]
+
+    print("\n:::::::: COUNT OF GUESTS ::::::::")
+    print("Total Guests     :", total)
+    print("VIP Guests       :", vip)
+    print("Non-VIP Guests   :", non_vip)
+    
     
  #Checking the availability of the room       
 def room_available():
@@ -97,6 +111,7 @@ def room_available():
         print("Room is occupied by another guest.")
     else:
         print("Room is available.")
+        
         
 #condition for each function
 while True:
@@ -133,5 +148,6 @@ while True:
         break;
     else:
         print("Invalid Choice")
+        
 cursor.close()
 conn.close()
